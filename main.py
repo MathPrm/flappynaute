@@ -34,7 +34,7 @@ obstacles = [400, 700, 900, 1000, 1330, 1600]
 generate_places = True
 y_positions = []
 game_over = False
-speed = 1
+speed = 2
 score = 0
 high_score = 0
 stars = []
@@ -45,7 +45,7 @@ def draw_player(x_pos, y_pos):
     play = pygame.draw.rect(screen, white, [x_pos, y_pos, 30, 30], 0, 12)
     eye = pygame.draw.circle(screen, black, [x_pos + 24, y_pos + 12], 5)
     jetpack = pygame.draw.rect(screen, white, [x_pos - 20, y_pos, 18, 28], 3, 2)
-    hitbox = pygame.draw.circle(screen, red, [x_pos, y_pos], 5)
+    hitbox = pygame.draw.circle(screen, red, [x_pos, y_pos], 1)
     if y_change < 0:
         flame1 = pygame.draw.rect(screen, red, [x_pos - 20, y_pos + 29, 7, 20], 0, 2)
         flame1_yellow = pygame.draw.rect(screen, yellow, [x_pos - 18, y_pos + 30, 3, 10], 0, 2)
@@ -63,12 +63,12 @@ def draw_obstacles(obst, y_pos, play):
         top2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord - 20, 36, 20], 0, 5)
         bot_rect = pygame.draw.rect(screen, gray, [obst[i], y_coord + 200, 30, HEIGHT - (y_coord + 70)])
         bot2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord + 200, 36, 20], 0, 5)
-        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord, 2, 200], 0, 2)
-        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord, 2, 200], 0, 2)
+        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord, 1, 200], 0, 2)
+        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord, 1, 200], 0, 2)
         if top_rect.colliderect(player) or bot_rect.colliderect(player):
             game_over = True
-        elif right_door.colliderect(hitbox):
-            score += 1
+        # elif right_door.colliderect(hitbox):
+        #     score += 1
     
 
 def draw_stars(stars):
@@ -128,11 +128,11 @@ while running:
     for i in range(len(obstacles)):
         if not game_over:
             obstacles[i] -= speed
-            # if obstacles[i] < -30:
-            #     obstacles.remove(obstacles[i])
-            #     y_positions.remove(y_positions[i])
-            #     obstacles.append(random.randint(obstacles[-1] + 280, obstacles[-1] + 320))
-            #     y_positions.append(random.randint(0, 300))
+            if obstacles[i] < -30:
+                obstacles.remove(obstacles[i])
+                y_positions.remove(y_positions[i])
+                obstacles.append(random.randint(obstacles[-1] + 280, obstacles[-1] + 320))
+                y_positions.append(random.randint(0, 300))
                 # score += 1
 
     if score > high_score:
