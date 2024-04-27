@@ -45,7 +45,6 @@ def draw_player(x_pos, y_pos):
     play = pygame.draw.rect(screen, white, [x_pos, y_pos, 30, 30], 0, 12)
     eye = pygame.draw.circle(screen, black, [x_pos + 24, y_pos + 12], 5)
     jetpack = pygame.draw.rect(screen, white, [x_pos - 20, y_pos, 18, 28], 3, 2)
-    hitbox = pygame.draw.circle(screen, red, [x_pos, y_pos], 1)
     if y_change < 0:
         flame1 = pygame.draw.rect(screen, red, [x_pos - 20, y_pos + 29, 7, 20], 0, 2)
         flame1_yellow = pygame.draw.rect(screen, yellow, [x_pos - 18, y_pos + 30, 3, 10], 0, 2)
@@ -53,22 +52,25 @@ def draw_player(x_pos, y_pos):
         flame2_yellow = pygame.draw.rect(screen, yellow, [x_pos - 8, y_pos + 30, 3, 10], 0, 2)
     return play
 
+def draw_hitbox(x_pos, y_pos):
+    hitbox = pygame.draw.rect(screen, red, [x_pos, y_pos, 1, 1], 0, 2 )
+    return hitbox 
+
 def draw_obstacles(obst, y_pos, play):
     global game_over
     global score
-    global hitbox
     for i in range(len(obst)):
         y_coord = y_pos[i]
         top_rect = pygame.draw.rect(screen, gray, [obst[i], 0, 30, y_coord])
         top2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord - 20, 36, 20], 0, 5)
         bot_rect = pygame.draw.rect(screen, gray, [obst[i], y_coord + 200, 30, HEIGHT - (y_coord + 70)])
         bot2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord + 200, 36, 20], 0, 5)
-        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord, 1, 200], 0, 2)
-        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord, 1, 200], 0, 2)
+        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord - 5, 1, 210], 0, 2)
+        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord - 5, 1, 210], 0, 2)
+        if hitbox.colliderect(right_door):
+            score += 1
         if top_rect.colliderect(player) or bot_rect.colliderect(player):
             game_over = True
-        # elif right_door.colliderect(hitbox):
-        #     score += 1
     
 
 def draw_stars(stars):
@@ -98,6 +100,7 @@ while running:
 
     stars = draw_stars(stars)
     player = draw_player(player_x, player_y)
+    hitbox = draw_hitbox(player_x, player_y)
     draw_obstacles(obstacles, y_positions, player)
 
     for event in pygame.event.get():
@@ -133,19 +136,19 @@ while running:
                 y_positions.remove(y_positions[i])
                 obstacles.append(random.randint(obstacles[-1] + 280, obstacles[-1] + 320))
                 y_positions.append(random.randint(0, 300))
-                # score += 1
 
     if score > high_score:
         high_score = score
+        
+    score_text = font.render('Score: ' + str(score), True, white)
+    screen.blit(score_text, (10, 450))
+    high_score_text = font.render('High Score: ' + str(high_score), True, white)
+    screen.blit(high_score_text, (10, 470))
 
     if game_over:
         game_over_text = font.render('Game Over ! Press Space To Restart ! ', True, white)
         screen.blit(game_over_text, (250, 250))
 
-    score_text = font.render('Score: ' + str(score), True, white)
-    screen.blit(score_text, (10, 450))
-    high_score_text = font.render('High Score: ' + str(high_score), True, white)
-    screen.blit(high_score_text, (10, 470))
 
     pygame.display.flip()
 pygame.quit()
