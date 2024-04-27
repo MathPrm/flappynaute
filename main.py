@@ -11,7 +11,7 @@ white = (255, 255, 255)
 gray = (128, 128, 128)
 red = (255, 0, 0)
 yellow = (255, 255, 0)
-pygame.display.set_caption('Flappynaute')
+pygame.display.set_caption('Space Bird')
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 timer = pygame.time.Clock()
 font = pygame.font.Font('freesansbold.ttf', 20)
@@ -38,6 +38,7 @@ speed = 2
 score = 0
 high_score = 0
 stars = []
+player_scored_this_iteration = False
 
 def draw_player(x_pos, y_pos):
     global y_change
@@ -54,6 +55,9 @@ def draw_player(x_pos, y_pos):
 
 def draw_obstacles(obst, y_pos, play):
     global game_over
+    global score
+    # player_collided_with_door = False
+
     for i in range(len(obst)):
         y_coord = y_pos[i]
         top_rect = pygame.draw.rect(screen, gray, [obst[i], 0, 30, y_coord])
@@ -62,6 +66,17 @@ def draw_obstacles(obst, y_pos, play):
         bot2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord + 200, 36, 20], 0, 5)
         if top_rect.colliderect(player) or bot_rect.colliderect(player):
             game_over = True
+        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord, 2, 200], 0, 2)
+        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord, 2, 200], 0, 2)
+        if right_door.colliderect(player):
+            score += 1
+    #     if right_door.colliderect(player):
+    #         player_collided_with_door = True
+    #         print("Collision detected with right_door")  # Débogage
+    # if player_collided_with_door:
+    #     score += 1
+    #     print("Score incremented")  # Débogage 
+    
 
 def draw_stars(stars):
     global total
@@ -125,7 +140,7 @@ while running:
                 y_positions.remove(y_positions[i])
                 obstacles.append(random.randint(obstacles[-1] + 280, obstacles[-1] + 320))
                 y_positions.append(random.randint(0, 300))
-                score += 1
+                # score += 1
 
     if score > high_score:
         high_score = score
