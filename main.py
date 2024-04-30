@@ -13,6 +13,8 @@ red = (255, 0, 0)
 yellow = (255, 255, 0)
 pygame.display.set_caption('Space Bird')
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
+gameIcon = pygame.image.load("voldichou.png")
+pygame.display.set_icon(gameIcon)
 timer = pygame.time.Clock()
 font = pygame.font.Font('freesansbold.ttf', 20)
 
@@ -53,7 +55,7 @@ def draw_player(x_pos, y_pos):
     return play
 
 def draw_hitbox(x_pos, y_pos):
-    hitbox = pygame.draw.rect(screen, red, [x_pos, y_pos, 1, 1], 0, 2 )
+    hitbox = pygame.draw.rect(screen, red, [x_pos, y_pos, 2, 2], 0, 2 )
     return hitbox 
 
 def draw_obstacles(obst, y_pos, play):
@@ -65,9 +67,15 @@ def draw_obstacles(obst, y_pos, play):
         top2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord - 20, 36, 20], 0, 5)
         bot_rect = pygame.draw.rect(screen, gray, [obst[i], y_coord + 200, 30, HEIGHT - (y_coord + 70)])
         bot2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord + 200, 36, 20], 0, 5)
-        left_door = pygame.draw.rect(screen, red, [obst[i], y_coord - 5, 1, 210], 0, 2)
-        right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord - 5, 1, 210], 0, 2)
-        if hitbox.colliderect(right_door):
+        # right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord - 5, 1, 210], 0, 2)
+        right_door = pygame.Surface([1, 210], pygame.SRCALPHA, 32)
+        right_door.fill((255, 255, 0, 1))
+        # right_door.convert_alpha()
+        # pygame.Surface.set_colorkey(right_door, (255, 255, 255))
+        screen.blit(right_door, (obst[i] + 30, y_coord - 5))
+        right_door = right_door.get_rect(topleft = (obst[i] + 30, y_coord - 5))
+        if right_door.colliderect(hitbox):
+            print('toto')
             score += 1
         if top_rect.colliderect(player) or bot_rect.colliderect(player):
             game_over = True
