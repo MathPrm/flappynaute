@@ -61,6 +61,7 @@ def draw_hitbox(x_pos, y_pos):
 def draw_obstacles(obst, y_pos, play):
     global game_over
     global score
+    global speed
     for i in range(len(obst)):
         y_coord = y_pos[i]
         top_rect = pygame.draw.rect(screen, gray, [obst[i], 0, 30, y_coord])
@@ -70,6 +71,7 @@ def draw_obstacles(obst, y_pos, play):
         # right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord - 5, 1, 210], 0, 2)
         right_door = pygame.Surface([1, 210], pygame.SRCALPHA, 32)
         right_door.fill((255, 255, 0, 1))
+        32
         # right_door.convert_alpha()
         # pygame.Surface.set_colorkey(right_door, (255, 255, 255))
         screen.blit(right_door, (obst[i] + 30, y_coord - 5))
@@ -145,8 +147,14 @@ while running:
                 obstacles.append(random.randint(obstacles[-1] + 280, obstacles[-1] + 320))
                 y_positions.append(random.randint(0, 300))
 
+
     if score > high_score:
         high_score = score
+
+
+    if score % 10 == 0:
+        speed += 1
+        print(speed)  
         
     score_text = font.render('Score: ' + str(score), True, white)
     screen.blit(score_text, (10, 450))
