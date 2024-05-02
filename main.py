@@ -79,8 +79,12 @@ def draw_obstacles(obst, y_pos, play):
         if right_door.colliderect(hitbox):
             print('toto')
             score += 1
+        if right_door.colliderect(hitbox) and score % 10 == 0 and not score == 0:
+            speed += 1
+        print(speed) 
         if top_rect.colliderect(player) or bot_rect.colliderect(player):
             game_over = True
+            speed = 2
     
 
 def draw_stars(stars):
@@ -150,11 +154,6 @@ while running:
 
     if score > high_score:
         high_score = score
-
-
-    if score % 10 == 0:
-        speed += 1
-        print(speed)  
         
     score_text = font.render('Score: ' + str(score), True, white)
     screen.blit(score_text, (10, 450))
