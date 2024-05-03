@@ -55,7 +55,7 @@ def draw_player(x_pos, y_pos):
     return play
 
 def draw_hitbox(x_pos, y_pos):
-    hitbox = pygame.draw.rect(screen, red, [x_pos, y_pos, 2, 2], 0, 2 )
+    hitbox = pygame.draw.rect(screen, red, [x_pos, y_pos - 90, 2, 210], 0, 2 )
     return hitbox 
 
 def draw_obstacles(obst, y_pos, play):
@@ -70,8 +70,7 @@ def draw_obstacles(obst, y_pos, play):
         bot2 = pygame.draw.rect(screen, gray, [obst[i] - 3, y_coord + 200, 36, 20], 0, 5)
         # right_door = pygame.draw.rect(screen, yellow, [obst[i] + 30, y_coord - 5, 1, 210], 0, 2)
         right_door = pygame.Surface([1, 210], pygame.SRCALPHA, 32)
-        right_door.fill((255, 255, 0, 1))
-        32
+        right_door.fill((255, 255, 0))
         # right_door.convert_alpha()
         # pygame.Surface.set_colorkey(right_door, (255, 255, 255))
         screen.blit(right_door, (obst[i] + 30, y_coord - 5))
